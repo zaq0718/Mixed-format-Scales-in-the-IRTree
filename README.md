@@ -7,7 +7,7 @@ A new proposed bi-factor model (Wang, Chen, & Jin, 2015) will be incorporated a 
 **Data**: The constructs of neuroticism and extraversion will be analyzed. 
 The data were from [PIAAC Pilot Studies on Non-Cognitive Skills](https://www.gesis.org/en/piaac/rdc/data/piaac-pilot-studies-on-non-cognitive-skills/) 
 
-**Code**: We provided Winbugs codes to run the IRTree model in which takes negative items into account.
+**Code**: Winbugs is used to run the IRTree model in which takes negative items into account.
 
 **References**: 
 1.	Böckenholt, U. (2012). Modeling multiple response processes in judgment and choice. Psychological Methods, 17, 665–678.
