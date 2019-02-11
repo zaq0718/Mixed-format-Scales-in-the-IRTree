@@ -1,0 +1,93 @@
+##Winbugs_Codes
+## Six latent traits were estimated. Three latent traits are for postive items, 
+and other three latent traits are for negative items. Each latent trait has a correlation with another latent trait. 
+
+model {
+for (i in 1:people) 
+{
+
+theta[i, 1:3] ~ dmnorm(mu1[1:3], Inv_sigma1[1:3, 1:3])
+negative[i, 1:3] ~ dmnorm(mu2[1:3], Inv_sigma2[1:3, 1:3])
+
+for (j in 1:itemnum1) 
+{	
+logit(m[i,j]) <- alpha_m[j]*theta[i,1]-beta_m[j] 
+logit(t[i,j]) <- alpha_t[j]*theta[i,2]-beta_t[j] 
+logit(e[i,j]) <- alpha_e[j]*theta[i,3]-beta_e[j] 
+
+P[i,j,1] <-(1-m[i,j])*(1-t[i,j])*e[i,j]
+P[i,j,2] <-(1-m[i,j])*(1-t[i,j])*(1-e[i,j])
+P[i,j,3] <-m[i,j]
+P[i,j,4] <-(1-m[i,j])*t[i,j]*(1-e[i,j])
+P[i,j,5] <-(1-m[i,j])*t[i,j]*e[i,j]
+response[i,j] ~ dcat(P[i,j,])
+}
+
+for (j in (itemnum1+1):(itemnum1+itemnum2)) 
+{	
+logit(m[i,j]) <- alpha_m[j]*theta[i,1]+alpha_m_ne[j]*negative[i,1]-beta_m[j] 
+logit(t[i,j]) <- alpha_t[j]*theta[i,2]+alpha_t_ne[j]*negative[i,2]-beta_t[j] 
+logit(e[i,j]) <- alpha_e[j]*theta[i,3]+alpha_e_ne[j]*negative[i,3]-beta_e[j] 
+
+P[i,j,1] <-(1-m[i,j])*(1-t[i,j])*e[i,j]
+P[i,j,2] <-(1-m[i,j])*(1-t[i,j])*(1-e[i,j])
+P[i,j,3] <-m[i,j]
+P[i,j,4] <-(1-m[i,j])*t[i,j]*(1-e[i,j])
+P[i,j,5] <-(1-m[i,j])*t[i,j]*e[i,j]
+response[i,j] ~ dcat(P[i,j,])
+}
+}
+
+##prior 
+
+mu1[1] <- 0
+mu1[2] <- 0
+mu1[3] <- 0
+rho1[1] ~ dunif(-1, 1)
+rho1[2] ~ dunif(-1, 1)
+rho1[3] ~ dunif(-1, 1)
+sigma1[1,1] <- 1
+sigma1[1,2] <- rho1[1]
+sigma1[1,3] <- rho1[2]
+sigma1[2,1] <- rho1[1]
+sigma1[2,2] <- 1
+sigma1[2,3] <- rho1[3]
+sigma1[3,1] <- rho1[2]
+sigma1[3,2] <- rho1[3]
+sigma1[3,3] <- 1
+Inv_sigma1[1:3,1:3] <- inverse(sigma1[1:3,1:3])
+
+mu2[1] <- 0
+mu2[2] <- 0
+mu2[3] <- 0
+rho2[1] ~ dunif(-1, 1)
+rho2[2] ~ dunif(-1, 1)
+rho2[3] ~ dunif(-1, 1)
+sigma2[1,1] <- 1
+sigma2[1,2] <- rho2[1]
+sigma2[1,3] <- rho2[2]
+sigma2[2,1] <- rho2[1]
+sigma2[2,2] <- 1
+sigma2[2,3] <- rho2[3]
+sigma2[3,1] <- rho2[2]
+sigma2[3,2] <- rho2[3]
+sigma2[3,3] <- 1
+Inv_sigma2[1:3, 1:3] <- inverse(sigma2[1:3,1:3])
+
+for (j in 1:(itemnum1+itemnum2)) 
+{
+alpha_m[j]~ dlnorm(0, 0.5)
+alpha_t[j]~ dlnorm(0, 0.5)
+alpha_e[j]~ dlnorm(0, 0.5)
+beta_m[j]~ dnorm(0, 0.1)
+beta_t[j]~ dnorm(0, 0.1)
+beta_e[j]~dnorm(0, 0.1)
+}
+
+for (j in (itemnum1+1):(itemnum1+itemnum2)) 
+{
+alpha_m_ne[j]~ dlnorm(0, 0.5)
+alpha_t_ne[j]~ dlnorm(0, 0.5)
+alpha_e_ne[j]~ dlnorm(0, 0.5)
+}
+}
