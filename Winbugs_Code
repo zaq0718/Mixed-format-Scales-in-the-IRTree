@@ -1,6 +1,6 @@
 ##Winbugs_Codes
-## Six latent traits were estimated. Three latent traits are for postive items, 
-and other three latent traits are for negative items. Each latent trait has a correlation with another latent trait. 
+## Six latent traits were estimated. Three latent traits were for postive items, 
+and other three latent traits were for negative items. Each latent trait had a correlation with another latent trait. 
 
 model {
 for (i in 1:people) 
